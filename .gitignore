@@ -1,0 +1,10 @@
+*~
+*.log
+*.class
+.classpath
+.project
+*.war
+WebContent/WEB-INF/classes
+build
+bin
+.*
