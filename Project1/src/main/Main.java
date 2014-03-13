@@ -1,5 +1,9 @@
+package main;
+
 import java.sql.*;
 import java.io.*;
+
+import CarRental.Search;
 
 public class Main{
 
@@ -14,7 +18,6 @@ public class Main{
         
     	while (c_password == false) {
 	        try{
-	            cns.printf("In try.\n");
 	            Class drvClass = Class.forName(m_driverName);
 	            Connection con = DriverManager.getConnection(m_url,
 	                                m_username,m_password);
@@ -28,18 +31,16 @@ public class Main{
 	        }
     	}
     	
-    	cns.printf("\n\n Enter the word 'quit' when you want to exit.\n");
-    	cns.printf("Enter one of the 5 commands to perform an action.\n");
-    	cns.printf("'nvReg' for a new vehicle registrations.\n");
-    	cns.printf("'autoT' for an automobile transaction.\n");
-    	cns.printf("'dlReg' for a driver license registration.\n");
-    	cns.printf("'vRecord' for a violation record.\n");
-    	cns.printf("'search' for a search.\n");
+    	printStartMessage(cns);
     	String input;
         while (true) {
-        	input = cns.readLine();
-        	if (input == "quit") {
+        	input = cns.readLine("Please enter a command: ");
+        	if (input.equals("quit")) {
         		break;
+        	}
+        	if (input.equals("search")) {
+        		Search.search(m_username, m_password, cns);
+        		printStartMessage(cns);
         	}
         }
     }
@@ -50,5 +51,15 @@ public class Main{
     
     public static String grabPassword(Console cns) {
         return new String(cns.readPassword("Password: "));
+    }
+    
+    public static void printStartMessage(Console cns) {
+    	cns.printf("\n\n\n" + "Enter the word 'quit' when you want to exit.\n");
+    	cns.printf("Enter one of the 5 commands to perform an action.\n");
+    	cns.printf("'nvReg' for a new vehicle registrations.\n");
+    	cns.printf("'autoT' for an automobile transaction.\n");
+    	cns.printf("'dlReg' for a driver license registration.\n");
+    	cns.printf("'vRecord' for a violation record.\n");
+    	cns.printf("'search' for a search.\n\n");
     }
 }

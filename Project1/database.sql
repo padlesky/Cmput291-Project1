@@ -72,7 +72,7 @@ CREATE TABLE restriction(
 );
 
 /*
- *  to store all the typles of vehicles
+ *  to store all the types of vehicles
  */
 CREATE TABLE vehicle_type (
   type_id       integer,
