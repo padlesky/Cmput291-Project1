@@ -40,7 +40,9 @@ public class Db {
 		ResultSet vihcile = s
 				.executeQuery("CREATE TABLE vehicle (serial_no CHAR(15), "
 						+ "maker VARCHAR(20),model VARCHAR(20),year number(4,0),"
-						+ "color VARCHAR(10)" + "PRIMARY KEY (serial_no),);");
+						+ "color VARCHAR(10)" + "type_id integer,"
+						+ "PRIMARY KEY (serial_no),"
+						+ " FOREIGN KEY (type_id) REFERENCES vehicle_type);");
 	}
 
 	public void drive_licence() throws SQLException {
@@ -68,6 +70,62 @@ public class Db {
 				+ "PRIMARY KEY (licence_no, r_id),"
 				+ "FOREIGN KEY (licence_no) REFERENCES drive_licence,"
 				+ "FOREIGN KEY (r_id) REFERENCES driving_condition" + ");");
+	}
+
+	public void vehicle_type() throws SQLException {
+		Statement s = con.createStatement();
+		ResultSet vihcile = s.executeQuery("CREATE TABLE vehicle_type ("
+				+ "type_id       integer," + "type          CHAR(10),"
+				+ "PRIMARY KEY (type_id)" + ");");
+	}
+
+	public void owner() throws SQLException {
+		Statement s = con.createStatement();
+		ResultSet vihcile = s.executeQuery("CREATE TABLE owner ("
+				+ "owner_id          CHAR(15)," + "vehicle_id        CHAR(15),"
+				+ "is_primary_owner  CHAR(1),"
+				+ "PRIMARY KEY (owner_id, vehicle_id),"
+				+ "FOREIGN KEY (owner_id) REFERENCES people,"
+				+ "FOREIGN KEY (vehicle_id) REFERENCES vehicle,"
+				+ "CHECK ( is_primary_owner IN ('y', 'n')));");
+	}
+
+	public void auto_sale() throws SQLException {
+		Statement s = con.createStatement();
+		ResultSet vihcile = s.executeQuery(" CREATE TABLE auto_sale ("
+				+ "transaction_id  int," + "seller_id   CHAR(15),"
+				+ "buyer_id    CHAR(15)," + "vehicle_id  CHAR(15),"
+				+ "s_date      date," + "price       numeric(9,2),"
+				+ "PRIMARY KEY (transaction_id),"
+				+ "FOREIGN KEY (seller_id) REFERENCES people,"
+				+ "FOREIGN KEY (buyer_id) REFERENCES people,"
+				+ "FOREIGN KEY (vehicle_id) REFERENCES vehicle);");
+	}
+
+	public void ticket_type() throws SQLException {
+		Statement s = con.createStatement();
+		ResultSet vihcile = s.executeQuery("CREATE TABLE ticket_type ("
+				+ "vtype     CHAR(10)," + "fine      number(5,2),"
+				+ "PRIMARY KEY (vtype));");
+	}
+
+	public void ticket() throws SQLException {
+		Statement s = con.createStatement();
+		ResultSet vihcile = s
+				.executeQuery("CREATE TABLE ticket ("
+						+ "ticket_no     int,"
+						+ "violator_no   CHAR(15),"
+						+ "vehicle_id    CHAR(15),"
+						+ "office_no     CHAR(15),"
+						+ "vtype        char(10),"
+						+ "vdate        date,"
+						+ "place        varchar(20),"
+						+ "descriptions varchar(1024),"
+						+ "PRIMARY KEY (ticket_no),"
+						+ "FOREIGN KEY (vtype) REFERENCES ticket_type,"
+						+ "FOREIGN KEY (violator_no) REFERENCES people ON DELETE CASCADE,"
+						+ "FOREIGN KEY (vehicle_id)  REFERENCES vehicle,"
+						+ "FOREIGN KEY (office_no) REFERENCES people ON DELETE CASCADE);");
 	}
 
 }
