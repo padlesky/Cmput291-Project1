@@ -23,6 +23,11 @@ public class Db {
 		}
 	}
 
+	public ResultSet create_statement(String statement) throws SQLException{
+		Statement s = con.createStatement();
+		ResultSet vihcile = s.executeQuery(statement);
+		return vihcile;
+	}
 	public void people() throws SQLException {
 		Statement s = con.createStatement();
 		ResultSet vihcile = s.executeQuery("CREATE TABLE  people ("
