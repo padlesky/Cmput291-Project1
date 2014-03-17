@@ -1,6 +1,8 @@
 package CarRental;
 
 import java.io.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Search {
 
@@ -19,6 +21,22 @@ public class Search {
 			String input = cns.readLine("Please enter a command: ");
 			if (input.equals("exit")) {
 				break;
+			}
+			if (input.equals("driverGN")){
+				String givenName = cns.readLine("Please enter a name: ");
+				Db db = new Db(m_username, m_password);
+				ArrayList<FirstSearchContainer> results = db.driverGN(givenName);
+				if (results == null) {
+					cns.printf("No results for %s were found\n", givenName);
+				} else {
+					cns.printf("Results for %s are:\n\n", input);
+					cns.printf("Name \t Licence# \t Address \t Birthday \t Class \t Description \t Expiration Date \n");
+					for (FirstSearchContainer result: results) {
+						cns.printf("%s \t %s \t %s \t %s \t %s \t %s \t %s \n", result.getName(), result.getLicence_no(),
+										result.getAddr(), result.getBirthday().toString(), result.getdClass(), result.getDescription(),
+										result.getExpDate().toString());
+					}
+				}
 			}
 		}
 	}

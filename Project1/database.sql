@@ -35,6 +35,10 @@ CREATE TABLE  people (
   CHECK ( gender IN ('m', 'f') )
 );
 
+INSERT INTO people VALUES (
+ '15451654', 'Bob', 45, 120, 'blue', 'brown', 'New Kingston rd, St. Albert', 'm', date '2008-03-07'
+);
+
 /*
  *  Table containing drive_licence info
  */
@@ -51,6 +55,10 @@ CREATE TABLE drive_licence (
         ON DELETE CASCADE
 );
 
+INSERT INTO drive_licence VALUES (
+ '012541', '15451654', 'class 1', NULL, date '2012-03-07', date '2015-04-09'
+);
+
 /*
  *  The driving conditions
  */
@@ -58,6 +66,10 @@ CREATE TABLE driving_condition (
   c_id        INTEGER,
   description VARCHAR(1024),
   PRIMARY KEY (c_id)
+);
+
+INSERT INTO driving_condition VALUES (
+ '5454', 'Test case for search function'
 );
 
 /*
@@ -69,6 +81,10 @@ CREATE TABLE restriction(
   PRIMARY KEY (licence_no, r_id),
   FOREIGN KEY (licence_no) REFERENCES drive_licence,
   FOREIGN KEY (r_id) REFERENCES driving_condition
+);
+
+INSERT INTO restriction VALUES (
+ '012541', '5454'
 );
 
 /*

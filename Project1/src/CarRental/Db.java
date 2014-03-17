@@ -1,6 +1,7 @@
 package CarRental;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.io.*;
 
 public class Db {
@@ -21,6 +22,18 @@ public class Db {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ResultSet performQuery(String stmt) {
+		Statement st = null;
+		try {
+			st = this.con.createStatement();
+			ResultSet rs= st.executeQuery(stmt);
+			return rs;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public ResultSet create_statement(String statement) throws SQLException{
@@ -132,5 +145,30 @@ public class Db {
 						+ "FOREIGN KEY (vehicle_id)  REFERENCES vehicle,"
 						+ "FOREIGN KEY (office_no) REFERENCES people ON DELETE CASCADE);");
 	}
-
+	
+	public ArrayList<FirstSearchContainer> driverGN(String givenName) {
+		String stm  = "SELECT ppl.name name, dl.licence_no ln, ppl.addr addr, ppl.birthday bd, dl.class class, dc.description des, dl.expiring_date ed "
+				+ "FROM drive_licence dl, people ppl, restriction rst, driving_condition dc "
+				+ "WHERE dl.sin = ppl.sin AND dl.licence_no = rst.licence_no "
+				+ "AND rst.r_id = dc.c_id";
+		ResultSet rs = performQuery(stm);
+		ArrayList<FirstSearchContainer> fSCList = new ArrayList<FirstSearchContainer>();
+		try {
+			while (rs.next()) {
+				if (rs.getString("name").equalsIgnoreCase(givenName)) {
+					FirstSearchContainer result = new FirstSearchContainer (rs.getString("name"), rs.getString("ln"), 
+																			rs.getString("addr"), rs.getDate("bd"), rs.getString("class"), 
+																			rs.getString("des"), rs.getDate("ed"));
+					fSCList.add(result);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (fSCList.size() == 0) {
+			return null;
+		} else {
+			return fSCList;
+		}
+	}
 }
