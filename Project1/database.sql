@@ -96,6 +96,11 @@ CREATE TABLE vehicle_type (
   PRIMARY KEY (type_id)
 );
 
+INSERT INTO vehicle_type values 
+ (1,'SUV');
+INSERT INTO vehicle_type values 
+ (2,'Car');
+
 /*
  *   Vehicle information
  */
@@ -109,6 +114,7 @@ CREATE TABLE vehicle (
   PRIMARY KEY (serial_no),
   FOREIGN KEY (type_id) REFERENCES vehicle_type
 );
+INSERT INTO vehicle VALUES('0000', 'ford','es',2009,'grey','2');
 
 /*
  *   The ownership of each vehicle

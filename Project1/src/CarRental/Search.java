@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Search {
 
-	public static void search(String m_username, String m_password, Console cns) {
+	public static void search(Console cns) {
 		cns.printf("\n\n\n" + "Welcome to the search function, there are three\n" 
 					+ "different types of searches you can do. Type 'exit' to exit.\n\n"
 					+ "First is a search for driver by either inputing their given name\n"
@@ -24,7 +24,7 @@ public class Search {
 			}
 			if (input.equals("driverGN")){
 				String givenName = cns.readLine("Please enter a name: ");
-				Db db = new Db(m_username, m_password);
+				Db db = Db.getMeMyDBPlx();
 				ArrayList<FirstSearchContainer> results = db.driverGN(givenName);
 				if (results == null) {
 					cns.printf("No results for %s were found\n", givenName);

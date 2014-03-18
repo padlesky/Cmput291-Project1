@@ -3,11 +3,13 @@ package main;
 import java.sql.*;
 import java.io.*;
 
+import CarRental.Db;
 import CarRental.Search;
+import CarRental.NewRegistration;
 
 public class Main{
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws SQLException
     {
         String m_url="dbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
         String m_driverName="oracle.jdbc.driver.OracleDriver";
@@ -15,6 +17,7 @@ public class Main{
         String m_username = grabUsername(cns);
         String m_password = grabPassword(cns);
         boolean c_password = false;
+        Db db;
         
     	while (c_password == false) {
 	        try{
@@ -31,6 +34,9 @@ public class Main{
 	        }
     	}
     	
+    	// Set up the database with username and password
+    	db = Db.getMeMyDBPlx();
+    	db.init(m_username, m_password);
     	printStartMessage(cns);
     	String input;
         while (true) {
@@ -39,7 +45,11 @@ public class Main{
         		break;
         	}
         	if (input.equals("search")) {
-        		Search.search(m_username, m_password, cns);
+        		Search.search(cns);
+        		printStartMessage(cns);
+        	}
+        	if (input.equals("nvReg")){
+        		NewRegistration.newRegistration(cns);
         		printStartMessage(cns);
         	}
         }

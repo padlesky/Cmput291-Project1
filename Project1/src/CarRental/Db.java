@@ -7,13 +7,23 @@ import java.io.*;
 public class Db {
 
 	private Connection con = null;
-	private String m_url = "dbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-	private String m_driverName = "oracle.jdbc.driver.OracleDriver";
+	private static String m_url = "dbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+	private static String m_driverName = "oracle.jdbc.driver.OracleDriver";
+	private static Db instance;
 
+	public static Db getMeMyDBPlx() {
+		if (instance == null) {
+			instance = new Db();
+		}
+		return instance;
+	}
+	
+	
 	/**
 	 * Instantiating a Db object will perform connection
+	 * @return 
 	 */
-	public Db(String m_username, String m_password) {
+	public void init(String m_username, String m_password) {
 		try {
 			Class drvClass = Class.forName(m_driverName);
 			DriverManager.registerDriver((Driver) drvClass.newInstance());
