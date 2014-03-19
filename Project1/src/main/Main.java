@@ -9,7 +9,6 @@ import CarRental.DLReg;
 import CarRental.Db;
 import CarRental.NewRegistration;
 import CarRental.Search;
-
 public class Main{
 
     public static void main(String[] args) throws SQLException
