@@ -4,7 +4,6 @@ INDEX VERSION 1.126+/cshome/yuentung/git/Cmput291-Project1/.metadata/.plugins/or
 1159935248.index
 2898480234.index
 1698757907.index
-3813963771.index
 262802227.index
 2683054613.index
 3937884183.index
