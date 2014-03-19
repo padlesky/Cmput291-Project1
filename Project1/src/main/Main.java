@@ -1,11 +1,14 @@
 package main;
 
-import java.sql.*;
-import java.io.*;
+import java.io.Console;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
+import CarRental.DLReg;
 import CarRental.Db;
-import CarRental.Search;
 import CarRental.NewRegistration;
+import CarRental.Search;
 
 public class Main{
 
@@ -14,8 +17,8 @@ public class Main{
         String m_url="dbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
         String m_driverName="oracle.jdbc.driver.OracleDriver";
         Console cns = System.console();
-        String m_username = grabUsername(cns);
-        String m_password = grabPassword(cns);
+        String m_username = "yuentung"; //grabUsername(cns);
+        String m_password = "gnyttik_28118128"; //grabPassword(cns);
         boolean c_password = false;
         Db db;
         
@@ -50,6 +53,10 @@ public class Main{
         	}
         	if (input.equals("nvReg")){
         		NewRegistration.newRegistration(cns);
+        		printStartMessage(cns);
+        	}
+        	if (input.equals("dlReg")){
+        		DLReg.DLReg(cns);
         		printStartMessage(cns);
         	}
         }
