@@ -24,8 +24,8 @@ public class NewRegistration {
 			}
 			if (input.equals("")) {
 				System.out.println("This is Empty.");
-				input = cns
-						.readLine("Please enter the seial number of the car: ");
+				//input = cns
+					//	.readLine("Please enter the seial number of the car: ");
 			} else {
 				try {
 					ResultSet res = database
