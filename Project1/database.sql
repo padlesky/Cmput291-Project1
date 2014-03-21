@@ -36,7 +36,11 @@ CREATE TABLE  people (
 );
 
 INSERT INTO people VALUES (
- '15451654', 'Bob', 45, 120, 'blue', 'brown', 'New Kingston rd, St. Albert', 'm', date '2008-03-07'
+ '15451654', 'Bob', 45, 120, 'blue', 'brown', '141 New Kingston rd, St. Albert', 'm', date '1980-03-07'
+);
+
+INSERT INTO people VALUES (
+ '54549', 'Steve', 60, 140, 'blue', 'brown', '199 New Kingston rd, St. Albert', 'm', date '1992-10-07'
 );
 
 /*
@@ -96,10 +100,9 @@ CREATE TABLE vehicle_type (
   PRIMARY KEY (type_id)
 );
 
-INSERT INTO vehicle_type values 
- (1,'SUV');
-INSERT INTO vehicle_type values 
- (2,'Car');
+INSERT INTO vehicle_type VALUES (
+ 1, 'SUV'
+);
 
 /*
  *   Vehicle information
@@ -114,7 +117,10 @@ CREATE TABLE vehicle (
   PRIMARY KEY (serial_no),
   FOREIGN KEY (type_id) REFERENCES vehicle_type
 );
-INSERT INTO vehicle VALUES('0000', 'ford','es',2009,'grey','2');
+
+INSERT INTO vehicle VALUES (
+ '4525', 'HONDA', 'RANGE ROVER', '2013', 'green', 1
+);
 
 /*
  *   The ownership of each vehicle
@@ -153,6 +159,9 @@ CREATE TABLE ticket_type (
   fine      number(5,2),
   PRIMARY KEY (vtype)
 );
+INSERT INTO ticket_type VALUES (
+ 'parking', 56
+);
 
 /*
  *  Ticket records
@@ -172,4 +181,6 @@ CREATE TABLE ticket (
   FOREIGN KEY (vehicle_id)  REFERENCES vehicle,
   FOREIGN KEY (office_no) REFERENCES people ON DELETE CASCADE
 );
-
+INSERT INTO ticket VALUES (
+ 0141, '15451654', '4525', '54549', 'parking', date '2014-01-30', 'Spruce Grove', 'Parked inside the mall'
+);

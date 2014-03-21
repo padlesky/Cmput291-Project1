@@ -157,7 +157,8 @@ public class Db {
 	}
 	
 	public ArrayList<FirstSearchContainer> driverGN(String givenName) {
-		String stm  = "SELECT ppl.name name, dl.licence_no ln, ppl.addr addr, ppl.birthday bd, dl.class class, dc.description des, dl.expiring_date ed "
+		String stm  = "SELECT ppl.name name, dl.licence_no ln, ppl.addr addr, ppl.birthday bd, "
+				+ "dl.class class, dc.description des, dl.expiring_date ed "
 				+ "FROM drive_licence dl, people ppl, restriction rst, driving_condition dc "
 				+ "WHERE dl.sin = ppl.sin AND dl.licence_no = rst.licence_no "
 				+ "AND rst.r_id = dc.c_id";
@@ -180,5 +181,25 @@ public class Db {
 		} else {
 			return fSCList;
 		}
+	}
+	
+	public FirstSearchContainer driverLN(String licence_no) {
+		String stm  = "SELECT ppl.name name, dl.licence_no ln, ppl.addr addr, ppl.birthday bd, "
+				+ "dl.class class, dc.description des, dl.expiring_date ed "
+				+ "FROM drive_licence dl, people ppl, restriction rst, driving_condition dc "
+				+ "WHERE dl.sin = ppl.sin AND dl.licence_no = rst.licence_no "
+				+ "AND rst.r_id = dc.c_id AND dl.licence_no = '" + licence_no + "'";
+		ResultSet rs = performQuery(stm);
+		FirstSearchContainer result = null;
+		try {
+			if (rs.next()) {
+				result = new FirstSearchContainer (rs.getString("name"), rs.getString("ln"), 
+														rs.getString("addr"), rs.getDate("bd"), rs.getString("class"), 
+														rs.getString("des"), rs.getDate("ed"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
