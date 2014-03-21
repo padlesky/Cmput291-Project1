@@ -2,7 +2,6 @@ package CarRental;
 
 import java.io.Console;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -50,8 +49,11 @@ public class Auto_Transaction {
 					if (check_sin.next()) {
 						String buyer_sin = cns.readLine("Please enter the buyer's sin: ");
 						ResultSet check_buyer_sin = database
-								.create_statement("select owner_id from owner where owner_id= '"
-										+ sin + "'");
+								.create_statement("select sin from people where sin= '"
+										+ buyer_sin + "'");
+						String selling_date = cns.readLine("please enter the selling date:");
+						String price1 = cns.readLine("Please enter the sell price:");
+						double price = Double.parseDouble(price1); 
 						if(!(check_buyer_sin.next())){
 							name = cns
 									.readLine("Please enter the buyer's name: ");
@@ -70,23 +72,16 @@ public class Auto_Transaction {
 							String birthday = cns.readLine("Please enter the buyer's birthday (yyyy-mm-dd): ");
 				
 							database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
-									+ " VALUES('" + sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
+									+ " VALUES('" + buyer_sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
 									+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
 							
-							String selling_date = cns.readLine("please enter the selling date:");
-							String price1 = cns.readLine("Please enter the sell price");
-							double price = Double.parseDouble(price1); 
-							
-							int length =count_row();
-							database.create_statement("insert into auto_sale(transaction_id.seller_id,buyer_id,vehivle_id,s_sate,price)"
-									+" values('" + length + "','" + sin + "','" + buyer_sin + "','" + input + "',date'" + selling_date + "','" 
-											+ price + "')");
+														
 							
 
 							if (!(res.next())) {
 								//System.out.println("This car is not registed, transaction cancelled.\n");
 								
-								
+								System.out.print("This is a new car is not registed, so we can do this here.\n");
 								maker = cns
 										.readLine("Please enter the maker of the car: ");
 								model = cns
@@ -121,16 +116,25 @@ public class Auto_Transaction {
 								}
 								database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
 										+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
-							
+								String is_primary = "y"; 
+								database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
+										+ " VALUES('" +sin+"','" +input+"','" +is_primary+ "')");
 	
 								
 								}
 							
 							
-							database.create_statement("delete * from owner where vehicle_id = '"+input+"' ");
+							database.create_statement("delete from owner where vehicle_id = '" +input+"' ");
+							
 							String is_primary = "y";
 							database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-							+" vaules('"+buyer_sin+"','"+input+"','"+is_primary+ "')");
+									+ " VALUES('" +buyer_sin+"','" +input+"','" +is_primary+ "')");
+							System.out.print("Transacation completed\n");
+							int length =count_row();
+							database.create_statement("insert into auto_sale(transaction_id,seller_id,buyer_id,vehicle_id,s_date,price)"
+									+" values('" + length + "','" + sin + "','" + buyer_sin + "','" + input + "',date'" + selling_date + "','" 
+											+ price + "')");
+							
 							
 							}
 						else{
@@ -138,7 +142,7 @@ public class Auto_Transaction {
 							if (!(res.next())) {
 								//System.out.println("This car is not registed, transaction cancelled.\n");
 								
-								
+								System.out.print("This is a new car is not registed, so we can do this here.\n");
 								maker = cns
 										.readLine("Please enter the maker of the car: ");
 								model = cns
@@ -173,16 +177,25 @@ public class Auto_Transaction {
 								}
 								database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
 										+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
-							
-	
-								
+								String is_primary = "y"; 
+								database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
+										+ " VALUES('" +sin+"','" +input+"','" +is_primary+ "')");
 								}
 							
 							
-							database.create_statement("delete * from owner where vehicle_id = '" +input+"' ");
+							database.create_statement("delete from owner where vehicle_id = '" +input+"' ");
+							
 							String is_primary = "y";
+							System.out.println("insert into owner (owner_id,vehicle_id,is_primary_owner)"
+									+ " VALUES('" +buyer_sin+"','" +input+"','" +is_primary+ "')");
 							database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-							+" vaules('"+buyer_sin+"','"+input+"','"+is_primary+ "')");
+									+ " VALUES('" +buyer_sin+"','" +input+"','" +is_primary+ "')");
+							
+							int length =count_row();
+							database.create_statement("insert into auto_sale(transaction_id,seller_id,buyer_id,vehicle_id,s_date,price)"
+									+" values('" + length + "','" + sin + "','" + buyer_sin + "','" + input + "',date'" + selling_date + "','" 
+											+ price + "')");
+							
 							System.out.print("Transacation completed\n");
 						}
 					} else {
@@ -213,9 +226,12 @@ public class Auto_Transaction {
 	public static int count_row() throws SQLException{
 		Db database = Db.getMeMyDBPlx();
 		ResultSet statement = database.create_statement("Select count(*) from auto_sale");
-		int number =statement.getFetchSize();
-		number += 1;
-		return number;
+		int number=0;
+		if (statement.next()){
+			number =statement.getInt(1);
+		}
+		
+		return number+1;
 	}
 	
 }
