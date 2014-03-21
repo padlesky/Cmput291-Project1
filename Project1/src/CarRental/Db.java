@@ -1,8 +1,16 @@
 package CarRental;
 
-import java.sql.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.io.*;
 
 public class Db {
 
@@ -50,6 +58,22 @@ public class Db {
 		Statement s = con.createStatement();
 		ResultSet vihcile = s.executeQuery(statement);
 		return vihcile;
+	}
+	public PreparedStatement pre_stat(String statement1,String file1) throws SQLException, FileNotFoundException{
+		PreparedStatement stmt = con.prepareStatement(statement1);
+		 stmt.clearParameters();
+         // Set the first parameter 
+         File file = new File( file1 );
+	     System.out.println("the file length is " + file.length() );
+
+        stmt.setBinaryStream(1,new FileInputStream(file),(int)file.length());
+
+         // execute the insert statement
+         stmt.executeUpdate();
+         System.out.println( "the execution succeeds");
+	    con.commit();
+		return stmt;
+        
 	}
 	
 	

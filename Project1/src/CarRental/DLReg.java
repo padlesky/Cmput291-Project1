@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DLReg {
-	private static Connection conn = null;
+	//private static Connection conn = null;
 
 	public static void DLReg(Console cns) throws SQLException {
 		
@@ -15,6 +15,7 @@ public class DLReg {
 		Boolean a;
 
 		cns.printf("\n\nWelcome to the Driver Licence Registration function.\n");
+		//database.init(m_username, m_password) ;
 		while (a = true) {
 			//read the licence number
 			String licence_no = cns.readLine("Please enter the licence number of the driver: ");
@@ -46,7 +47,6 @@ public class DLReg {
 							if(birth.next()){
 								abc = birth.getString(1);
 							}
-							System.out.println(abc);
 							Date bday = date.parse(abc);
 							Date issuing = date.parse(i_date);
 							
@@ -67,22 +67,13 @@ public class DLReg {
 							}
 							
 							//need to import a pic of the driver!!!
-							PreparedStatement stmt = conn.prepareStatement("INSERT INTO drive_licence(licence_no, sin, class, photo, issuing_date, expiring_date)"
-									+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "', ?, date '" + i_date + "', date '" + e_date + "')");
+							String file = cns.readLine("Please select the photo to be inserted to the licence:");
+							String statement1="INSERT INTO drive_licence(licence_no, sin, class, photo, issuing_date, expiring_date)"
+									+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "', ?, date '" + i_date + "', date '" + e_date + "')";
+							 PreparedStatement stmt = database.pre_stat(statement1, file);
 									//"insert into pictures values (" + pid + ", '" + title+ "', '" + place + "', ?)" );
 
-						    stmt.clearParameters();
-						    // Set the first parameter 
-						    String pic = cns.readLine("Please select the photo to be inserted to the licence.");
-						    File file = new File( pic );
-						    System.out.println("the file length is " + file.length() );
-
-						    stmt.setBinaryStream(1,new FileInputStream(file),(int)file.length());
-
-						    // execute the insert statement
-						    stmt.executeUpdate();
-						    System.out.println( "the execution succeeds");
-					
+						   				
 //							//insert the given information to drive_licence 
 //							database.create_statement("INSERT INTO drive_licence(licence_no, sin, class, issuing_date, expiring_date)"
 //									+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "',"+/*'" + picture + "', */"date '" + i_date + "', date '" + e_date + "')");
@@ -124,22 +115,10 @@ public class DLReg {
 									expiring = date.parse(e_date);
 								}
 								
-								//need to import a pic of the driver!!!
-								PreparedStatement stmt = conn.prepareStatement("INSERT INTO drive_licence(licence_no, sin, class, photo, issuing_date, expiring_date)"
-										+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "', ?, date '" + i_date + "', date '" + e_date + "')");
-										//"insert into pictures values (" + pid + ", '" + title+ "', '" + place + "', ?)" );
-
-							    stmt.clearParameters();
-							    // Set the first parameter 
-							    String pic = cns.readLine("Please select the photo to be inserted to the licence.");
-							    File file = new File( pic );
-							    System.out.println("the file length is " + file.length() );
-
-							    stmt.setBinaryStream(1,new FileInputStream(file),(int)file.length());
-
-							    // execute the insert statement
-							    stmt.executeUpdate();
-							    System.out.println( "the execution succeeds");
+								String file = cns.readLine("Please select the photo to be inserted to the licence:");
+								String statement1="INSERT INTO drive_licence(licence_no, sin, class, photo, issuing_date, expiring_date)"
+										+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "', ?, date '" + i_date + "', date '" + e_date + "')";
+								 PreparedStatement stmt = database.pre_stat(statement1, file);
 							    
 								
 //								//insert the given information into drive_licence
