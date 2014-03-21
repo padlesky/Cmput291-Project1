@@ -36,30 +36,35 @@ public class VRecord {
 							//check if the violator number is valid or not
 							ResultSet check_violator = database.create_statement("SELECT sin FROM people WHERE sin = '" + violator_no + "'");
 							while (!(check_violator.next())) {
-								System.out.println("Invaid violator number.\n");
+								System.out.println("Invaid violator number");
+								violator_no = cns.readLine("Please enter the violator's number: ");
 								check_violator = database.create_statement("SELECT sin FROM people WHERE sin = '" + violator_no + "'");
 							}
 							
-							String vehicle_id = cns.readLine("Please enter the violator's number: ");
+							String vehicle_id = cns.readLine("Please enter the vehicle number: ");
 							//check if the vehicle id is valid or not
 							ResultSet check_vehicle = database.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '" + vehicle_id + "'");
 							while (!(check_vehicle.next())) {
-								System.out.println("Invaid vehicle id.\n");
+								System.out.println("Invaid vehicle id.");
+								vehicle_id = cns.readLine("Please enter the vehicle number: ");
 								check_vehicle = database.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '" + vehicle_id + "'");
 							}
 							
 							String office_no = cns.readLine("Please enter the officer's number: ");
 							//check if the officer number is valid or not
 							ResultSet check_office = database.create_statement("SELECT sin FROM people WHERE sin = '" + office_no + "'");
-							while (!(check_office.next())) {
-								System.out.println("Invaid officer number.\n");
+							System.out.println("v:"+violator_no);
+							System.out.println(":"+office_no);
+							while (office_no != null) {
+								if (violator_no==office_no && !(check_office.next())){
+									System.out.println("Invaid officer number.");
+								}
+//								if(violator_no==office_no){
+//									System.out.println("Invaid officer number.");
+//								}
+								office_no = cns.readLine("Please enter the officer's number: ");
 								check_office = database.create_statement("SELECT sin FROM people WHERE sin = '" + office_no + "'");
 							}
-							while (violator_no.equals(office_no)){
-								System.out.println("Invaid officer number.\n");
-								office_no = cns.readLine("Please enter the officer's number: ");
-							}
-								
 							
 							vtype= getQueryResult("select vtype from ticket_type");
 							System.out.print("Here are all the violation tyes,\n");
