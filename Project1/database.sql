@@ -181,6 +181,7 @@ CREATE TABLE ticket (
   FOREIGN KEY (vehicle_id)  REFERENCES vehicle,
   FOREIGN KEY (office_no) REFERENCES people ON DELETE CASCADE
 );
+
 INSERT INTO ticket VALUES (
  0141, '15451654', '4525', '54549', 'parking', date '2014-01-30', 'Spruce Grove', 'Parked inside the mall'
 );
