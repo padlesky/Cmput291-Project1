@@ -9,6 +9,7 @@ import CarRental.DLReg;
 import CarRental.Db;
 import CarRental.NewRegistration;
 import CarRental.Search;
+import CarRental.VRecord;
 public class Main{
 
     public static void main(String[] args) throws SQLException
@@ -56,6 +57,10 @@ public class Main{
         	}
         	if (input.equals("dlReg")){
         		DLReg.DLReg(cns);
+        		printStartMessage(cns);
+        	}
+        	if (input.equals("vRecord")){
+        		VRecord.VRecord(cns);
         		printStartMessage(cns);
         	}
         }
