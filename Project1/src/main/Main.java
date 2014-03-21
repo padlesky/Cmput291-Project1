@@ -17,8 +17,8 @@ public class Main{
         String m_url="dbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
         String m_driverName="oracle.jdbc.driver.OracleDriver";
         Console cns = System.console();
-        String m_username = "yuentung"; //grabUsername(cns);
-        String m_password = "gnyttik_28118128"; //grabPassword(cns);
+        String m_username = grabUsername(cns);
+        String m_password = grabPassword(cns);
         boolean c_password = false;
         Db db;
         
@@ -32,8 +32,8 @@ public class Main{
 	        }
 	        catch(Exception e){
 	        	cns.printf("Wrong username or password.\n"+"Plese try again.\n");
-	        	grabUsername(cns);
-	            grabPassword(cns);
+	        	m_username = grabUsername(cns);
+	            m_password = grabPassword(cns);
 	        }
     	}
     	
