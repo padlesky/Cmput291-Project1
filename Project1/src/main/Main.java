@@ -61,8 +61,8 @@ public class Main{
         	}
         	if (input.equals("vRecord")){
         		VRecord.VRecord(cns);
-        		printStartMessage(cns);
         	}
+    		printStartMessage(cns);
         }
     }
     
