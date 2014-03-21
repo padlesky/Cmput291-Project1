@@ -46,7 +46,6 @@ public class DLReg {
 							if(birth.next()){
 								abc = birth.getString(1);
 							}
-							System.out.println(abc);
 							Date bday = date.parse(abc);
 							Date issuing = date.parse(i_date);
 							
