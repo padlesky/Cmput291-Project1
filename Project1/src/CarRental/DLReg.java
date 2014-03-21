@@ -26,9 +26,7 @@ public class DLReg {
 			} else {
 				try {
 					//check if the licence number being registered or not
-					ResultSet check_dl = database
-							.create_statement("SELECT licence_no FROM drive_licence WHERE licence_no = '"
-									+ licence_no + "'");
+					ResultSet check_dl = database.create_statement("SELECT licence_no FROM drive_licence WHERE licence_no = '" + licence_no + "'");
 					if (check_dl.next()) {
 						System.out.println("This licence number is already registed");
 					} else {
@@ -138,27 +136,31 @@ public class DLReg {
 									e_date = cns.readLine("Please enter the expiring date (yyyy-mm-dd): ");
 									expiring = date.parse(e_date);
 								}
-					
 								//insert the given information into drive_licence
 								database.create_statement("INSERT INTO drive_licence(licence_no, sin, class, issuing_date, expiring_date)"
 										+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "',"+/*'" + picture + "', */"date '" + i_date + "', date '" + e_date + "')");
 						}
+						//Registeration complete
 						System.out.println("Registeration completed.");
+						
+						//Ask if the user continue entering
 						String next_op = cns.readLine("Would you like to do another operation?");
-						while(next_op != null)
-						if(next_op.toLowerCase()=="yes" || next_op.toLowerCase()=="y"){
-							a = true;
-						}
-						else if(next_op.toLowerCase()=="no" || next_op.toLowerCase()=="n"){
-							a = false;
-							break;
-						}
-						else{
-							System.out.println("Invalid input.");
-							next_op = cns.readLine("Would you like to do another operation?");
+						while(next_op != null){
+							if(next_op.toLowerCase()=="yes" || next_op.toLowerCase()=="y"){
+								a = true;
+							}
+							else if(next_op.toLowerCase()=="no" || next_op.toLowerCase()=="n"){
+								a = false;
+								break;
+							}
+							else{
+								System.out.println("Invalid input.");
+								next_op = cns.readLine("Would you like to do another operation?");
+							}
 						}
 						
-						}
+						
+					}
 							
 					
 				} catch (Exception ee) {
