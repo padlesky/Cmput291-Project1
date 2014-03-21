@@ -174,6 +174,6 @@ public class VRecord {
 		if(statement.next()){
 			number = statement.getInt(1);
 		}
-		return number;
+		return (number + 1);
 	}
 }
