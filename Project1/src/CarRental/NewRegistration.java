@@ -72,10 +72,7 @@ public class NewRegistration {
 										+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
 										
 							}
-							else {
-								System.out.println("Registration has been completed.");
-
-							}
+							
 								maker = cns
 										.readLine("Please enter the maker of the car: ");
 								model = cns
@@ -117,11 +114,15 @@ public class NewRegistration {
 								}
 					}				
 							else if (is_primary.toLowerCase().equals("no")||is_primary.toLowerCase().equals("n")){
+								
 								ResultSet res = database
 										.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '"
 												+ input + "'");
-								if (res.next()) {
-									
+								ResultSet check_Po= database.create_statement("select vehicle_id from owner where vehicle_id='"+input+"' and is_primary_owner = 'y'");
+						if ((check_Po.next())) {
+
+							if (res.next()) {
+
 								String sin = cns
 										.readLine("Please enter the owner's sin: ");
 								ResultSet check_sin = database
@@ -130,10 +131,12 @@ public class NewRegistration {
 								if (!(check_sin.next())) {
 									name = cns
 											.readLine("Please enter the owner's name: ");
-									double height = Double.parseDouble (cns
-											.readLine("Please enter the owner's height: "));
-									double weight = Double.parseDouble (cns
-											.readLine("Please enter the owner's weight: "));
+									double height = Double
+											.parseDouble(cns
+													.readLine("Please enter the owner's height: "));
+									double weight = Double
+											.parseDouble(cns
+													.readLine("Please enter the owner's weight: "));
 									String eyecolor = cns
 											.readLine("Please enter the owner's eye color: ");
 									String haircolor = cns
@@ -142,7 +145,8 @@ public class NewRegistration {
 											.readLine("Please enter the owner's address: ");
 									String gender = cns
 											.readLine("Please enter the owner's gender (m/f): ");
-									String birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+									String birthday = cns
+											.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
 						
 									database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
 											+ " VALUES('" + sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
@@ -231,6 +235,11 @@ public class NewRegistration {
 							}*/
 							
 					}
+						else{
+							System.out.print("Please enter primary owner first.\n");
+							a=true;
+						}
+				}
 					String is_end= cns.readLine("Wouild like do more opreation?");
 					if (is_end.toLowerCase().equals("yes")||is_end.toLowerCase().equals("y")){
 						a=true;
