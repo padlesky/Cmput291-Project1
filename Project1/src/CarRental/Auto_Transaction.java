@@ -15,7 +15,6 @@ public class Auto_Transaction {
 		String name;
 		String maker;
 		String model;
-		int serial_no;
 		boolean a;
 		int year;
 		ArrayList<ArrayList<String>> type;
@@ -28,73 +27,99 @@ public class Auto_Transaction {
 
 		cns.printf("\n\n\n" + "Welcome to the Auto Transaction function\n");
 		while (a = true) {
-			String sin = cns.readLine("Please enter the seller's sin: ");
-			String input = cns
-					.readLine("Please enter the seial number of the car: ");
-			ResultSet res = database
-					.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '"
-							+ input + "'");
-			if (sin.equals("exit")) {
+			//read the sin and serial number
+			String seller_sin = cns.readLine("Please enter the seller's sin: ");
+			String serial_no = cns.readLine("Please enter the seial number of the car: ");
+			//check if the input is valid or not
+			ResultSet res = database.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '" + serial_no + "'");
+			if (seller_sin.equals("exit")) {
 				break;
 			}
-			if (sin.equals("")) {
+			if (seller_sin.equals("")) {
 				System.out.println("This is Empty.");
-				// input = cns
-				// .readLine("Please enter the seial number of the car: ");
 			} else {
 				try {
+					//check if the seller sin is valid or not
 					ResultSet check_sin = database
-							.create_statement("select owner_id, is_primary_owner from owner where IS_PRIMARY_owner = 'y' and owner_id= '"
-									+ sin + "' ");
+							.create_statement("select owner_id, is_primary_owner from owner where IS_PRIMARY_owner = 'y' and owner_id= '" + seller_sin + "' ");
+					//if it is valid, go ahead and ask for buyer's information
 					if (check_sin.next()) {
 						String buyer_sin = cns.readLine("Please enter the buyer's sin: ");
-						ResultSet check_buyer_sin = database
-								.create_statement("select sin from people where sin= '"
-										+ buyer_sin + "'");
+						//check if the buyer is in our database or not
+						ResultSet check_buyer_sin = database.create_statement("select sin from people where sin= '" + buyer_sin + "'");
 						String selling_date = cns.readLine("please enter the selling date:");
 						String price1 = cns.readLine("Please enter the sell price:");
 						double price = Double.parseDouble(price1); 
 						if(!(check_buyer_sin.next())){
-							name = cns
-									.readLine("Please enter the buyer's name: ");
-							double height = Double.parseDouble (cns
-									.readLine("Please enter the buyer's height: "));
-							double weight = Double.parseDouble (cns
-									.readLine("Please enter the buyer's weight: "));
-							String eyecolor = cns
-									.readLine("Please enter the buyer's eye color: ");
-							String haircolor = cns
-									.readLine("Please enter the buyer's hair color: ");
-							String addr = cns
-									.readLine("Please enter the buyer's address: ");
-							String gender = cns
-									.readLine("Please enter the buyer's gender (m/f): ");
+							name = cns.readLine("Please enter the buyer's name: ");
+							while(!(TypeChecking.checkLetter(name))){
+								System.out.println("Invalid input.");
+								name = cns.readLine("Please enter the buyer's name: ");								
+							}
+							String height1 = cns.readLine("Please enter the buyer's height: ");
+							while(!(TypeChecking.checkInt(height1))){
+								System.out.println("Invalid input.");
+								name = cns.readLine("Please enter the buyer's height: ");								
+							}
+							double height = Double.parseDouble (height1);
+							String weight1 = cns.readLine("Please enter the buyer's weight: ");
+							while(!(TypeChecking.checkInt(weight1))){
+								System.out.println("Invalid input.");
+								weight1 = cns.readLine("Please enter the buyer's weight: ");								
+							}
+							double weight = Double.parseDouble (weight1);
+							String eyecolor = cns.readLine("Please enter the buyer's eye color: ");
+							while(!(TypeChecking.checkLetter(eyecolor))){
+								System.out.println("Invalid input.");
+								eyecolor = cns.readLine("Please enter the buyer's eye color: ");								
+							}
+							String haircolor = cns.readLine("Please enter the buyer's hair color: ");
+							while(!(TypeChecking.checkLetter(haircolor))){
+								System.out.println("Invalid input.");
+								haircolor = cns.readLine("Please enter the buyer's hair color: ");								
+							}
+							String addr = cns.readLine("Please enter the buyer's address: ");
+							while(!(TypeChecking.checkLetter(addr))){
+								System.out.println("Invalid input.");
+								addr = cns.readLine("Please enter the buyer's address: ");								
+							}
+							String gender = cns.readLine("Please enter the buyer's gender (m/f): ");
+							while(gender != "m" || gender != "f"){
+								System.out.println("Invalid input.");
+								gender = cns.readLine("Please enter the buyer's gender (m/f): ");								
+							}
 							String birthday = cns.readLine("Please enter the buyer's birthday (yyyy-mm-dd): ");
 				
 							database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
 									+ " VALUES('" + buyer_sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
 									+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
-							
-														
-							
 
 							if (!(res.next())) {
-								//System.out.println("This car is not registed, transaction cancelled.\n");
 								
 								System.out.print("This is a new car is not registed, so we can do this here.\n");
-								maker = cns
-										.readLine("Please enter the maker of the car: ");
-								model = cns
-										.readLine("Please enter the model of the car: ");
-								String year_buff = cns
-										.readLine("Please enter the year of the car: ");
+								maker = cns.readLine("Please enter the maker of the car: ");
+								while(!(TypeChecking.checkLetter(maker))){
+									System.out.println("Invalid input.");
+									maker = cns.readLine("Please enter the maker of the car: ");								
+								}
+								model = cns.readLine("Please enter the model of the car: ");
+								while(!(TypeChecking.checkLetter(model))){
+									System.out.println("Invalid input.");
+									model = cns.readLine("Please enter the model of the car: ");								
+								}
+								String year_buff = cns.readLine("Please enter the year of the car: ");
+								while(!(TypeChecking.checkInt(year_buff))){
+									System.out.println("Invalid input.");
+									year_buff = cns.readLine("Please enter the year of the car: ");								
+								}
 								year = Integer.parseInt(year_buff);
-								color = cns
-										.readLine("Please enter the color of the car: ");
-								
-								
+								color = cns.readLine("Please enter the color of the car: ");
+								while(!(TypeChecking.checkLetter(color))){
+									System.out.println("Invalid input.");
+									color = cns.readLine("Please enter the color of the car: ");								
+								}
 								type= nr.getQueryResult("select type from vehicle_type");//cns.readLine();
-								System.out.print("Here are all the type u can choice from, please choice from the following(Enter the index of your choice)\n");
+								System.out.print("Here are all the types you can choice from, please choose from the following(Enter the index of your choice)\n");
 								
 								for (int i=1;i<type.size();i++){
 									ab=type.get(i);
@@ -104,59 +129,62 @@ public class Auto_Transaction {
 									}
 								}
 								
-								String choice_type=cns.readLine("you choice: ");
+								String choice_type=cns.readLine("Please enter your type: ");
 								
 								ResultSet type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
 								
 								while (!(type1.next())){
-									
 								System.out.println("The input is invalid");
-								choice_type=cns.readLine("choice the type: ");
+								choice_type=cns.readLine("Please choose the type again: ");
 								type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
 								}
 								database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
-										+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
+										+ " VALUES('" + serial_no +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
 								String is_primary = "y"; 
 								database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-										+ " VALUES('" +sin+"','" +input+"','" +is_primary+ "')");
-	
-								
+										+ " VALUES('" +seller_sin+"','" +serial_no+"','" +is_primary+ "')");
 								}
 							
-							
-							database.create_statement("delete from owner where vehicle_id = '" +input+"' ");
+							database.create_statement("delete from owner where vehicle_id = '" +serial_no+"' ");
 							
 							String is_primary = "y";
 							database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-									+ " VALUES('" +buyer_sin+"','" +input+"','" +is_primary+ "')");
+									+ " VALUES('" +buyer_sin+"','" +serial_no+"','" +is_primary+ "')");
 							System.out.print("Transacation completed\n");
+							
 							int length =count_row();
 							database.create_statement("insert into auto_sale(transaction_id,seller_id,buyer_id,vehicle_id,s_date,price)"
-									+" values('" + length + "','" + sin + "','" + buyer_sin + "','" + input + "',date'" + selling_date + "','" 
+									+" values('" + length + "','" + seller_sin + "','" + buyer_sin + "','" + serial_no + "',date'" + selling_date + "','" 
 											+ price + "')");
-							
-							
 							}
 						else{
-
 							if (!(res.next())) {
-								//System.out.println("This car is not registed, transaction cancelled.\n");
 								
 								System.out.print("This is a new car is not registed, so we can do this here.\n");
-								maker = cns
-										.readLine("Please enter the maker of the car: ");
-								model = cns
-										.readLine("Please enter the model of the car: ");
-								String year_buff = cns
-										.readLine("Please enter the year of the car: ");
+								maker = cns.readLine("Please enter the maker of the car: ");
+								while(!(TypeChecking.checkLetter(maker))){
+									System.out.println("Invalid input.");
+									maker = cns.readLine("Please enter the maker of the car: ");								
+								}
+								model = cns.readLine("Please enter the model of the car: ");
+								while(!(TypeChecking.checkLetter(model))){
+									System.out.println("Invalid input.");
+									model = cns.readLine("Please enter the model of the car: ");								
+								}
+								String year_buff = cns.readLine("Please enter the year of the car: ");
+								while(!(TypeChecking.checkInt(year_buff))){
+									System.out.println("Invalid input.");
+									year_buff = cns.readLine("Please enter the year of the car: ");								
+								}
 								year = Integer.parseInt(year_buff);
-								color = cns
-										.readLine("Please enter the color of the car: ");
-								
+								color = cns.readLine("Please enter the color of the car: ");
+								while(!(TypeChecking.checkLetter(color))){
+									System.out.println("Invalid input.");
+									color = cns.readLine("Please enter the color of the car: ");								
+								}
 								
 								type= nr.getQueryResult("select type from vehicle_type");//cns.readLine();
 								System.out.print("Here are all the type u can choice from, please choice from the following(Enter the index of your choice)\n");
-								
 								for (int i=1;i<type.size();i++){
 									ab=type.get(i);
 									for (int j=0;j<ab.size();j++){
@@ -165,44 +193,37 @@ public class Auto_Transaction {
 									}
 								}
 								
-								String choice_type=cns.readLine("you choice: ");
-								
+								String choice_type=cns.readLine("Please enter your type: ");
 								ResultSet type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
-								
 								while (!(type1.next())){
-									
 								System.out.println("The input is invalid");
-								choice_type=cns.readLine("choice the type: ");
+								choice_type=cns.readLine("Please choose the type again: ");
 								type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
 								}
 								database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
-										+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
+										+ " VALUES('" + serial_no +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
 								String is_primary = "y"; 
 								database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-										+ " VALUES('" +sin+"','" +input+"','" +is_primary+ "')");
-								}
+										+ " VALUES('" +seller_sin+"','" +serial_no+"','" +is_primary+ "')");
+							}
 							
-							
-							database.create_statement("delete from owner where vehicle_id = '" +input+"' ");
-							
+							database.create_statement("delete from owner where vehicle_id = '" +serial_no+"' ");
 							String is_primary = "y";
-							System.out.println("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-									+ " VALUES('" +buyer_sin+"','" +input+"','" +is_primary+ "')");
 							database.create_statement("insert into owner (owner_id,vehicle_id,is_primary_owner)"
-									+ " VALUES('" +buyer_sin+"','" +input+"','" +is_primary+ "')");
+									+ " VALUES('" +buyer_sin+"','" +serial_no+"','" +is_primary+ "')");
 							
 							int length =count_row();
-							database.create_statement("insert into auto_sale(transaction_id,seller_id,buyer_id,vehicle_id,s_date,price)"
-									+" values('" + length + "','" + sin + "','" + buyer_sin + "','" + input + "',date'" + selling_date + "','" 
-											+ price + "')");
 							
+							database.create_statement("insert into auto_sale(transaction_id,seller_id,buyer_id,vehicle_id,s_date,price)"
+									+" values('" + length + "','" + seller_sin + "','" + buyer_sin + "','" + serial_no + "',date'" + selling_date + "','" 
+											+ price + "')");
 							System.out.print("Transacation completed\n");
 						}
 					} else {
-											
 						System.out.print("You dont own a vehicle, Transacation canceled\n");
 						break;
 					}
+
 					String is_end= cns.readLine("Wouild like do more opreation?");
 					if (is_end.toLowerCase().equals("yes")||is_end.toLowerCase().equals("y")){
 						a=true;
@@ -217,12 +238,13 @@ public class Auto_Transaction {
 					}
 				} catch (Exception ee) {
 					ee.printStackTrace();
-					}
-
 				}
+
 			}
 		}
-	
+	}
+	//this function is used to count the number of rows in a particular table
+	//then generate the row number for tables
 	public static int count_row() throws SQLException{
 		Db database = Db.getMeMyDBPlx();
 		ResultSet statement = database.create_statement("Select count(*) from auto_sale");
@@ -230,7 +252,6 @@ public class Auto_Transaction {
 		if (statement.next()){
 			number =statement.getInt(1);
 		}
-		
 		return number+1;
 	}
 	

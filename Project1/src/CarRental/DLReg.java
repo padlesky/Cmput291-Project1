@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DLReg {
-	//private static Connection conn = null;
 
 	public static void DLReg(Console cns) throws SQLException {
 		
@@ -66,17 +65,11 @@ public class DLReg {
 								expiring = date.parse(e_date);
 							}
 							
-							//need to import a pic of the driver!!!
+							//import a pic of the driver
 							String file = cns.readLine("Please select the photo to be inserted to the licence:");
 							String statement1="INSERT INTO drive_licence(licence_no, sin, class, photo, issuing_date, expiring_date)"
 									+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "', ?, date '" + i_date + "', date '" + e_date + "')";
 							 PreparedStatement stmt = database.pre_stat(statement1, file);
-									//"insert into pictures values (" + pid + ", '" + title+ "', '" + place + "', ?)" );
-
-						   				
-//							//insert the given information to drive_licence 
-//							database.create_statement("INSERT INTO drive_licence(licence_no, sin, class, issuing_date, expiring_date)"
-//									+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "',"+/*'" + picture + "', */"date '" + i_date + "', date '" + e_date + "')");
 							}
 							else{
 								//if he/she does not exists in people, ask for his/her personal information
@@ -119,39 +112,27 @@ public class DLReg {
 								String statement1="INSERT INTO drive_licence(licence_no, sin, class, photo, issuing_date, expiring_date)"
 										+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "', ?, date '" + i_date + "', date '" + e_date + "')";
 								 PreparedStatement stmt = database.pre_stat(statement1, file);
-							    
-								
-//								//insert the given information into drive_licence
-//								database.create_statement("INSERT INTO drive_licence(licence_no, sin, class, issuing_date, expiring_date)"
-//										+ " VALUES('" + licence_no + "','" + sin + "','" + dclass + "',"+/*'" + picture + "', */"date '" + i_date + "', date '" + e_date + "')");
 						}
 						//Registeration complete
 						System.out.println("Registeration completed.");
 						
 						//Ask if the user continue entering
 						String next_op = cns.readLine("Would you like to do another operation?");
-						while(next_op != null){
-							if(next_op.toLowerCase()=="yes" || next_op.toLowerCase()=="y"){
-								a = true;
-							}
-							else if(next_op.toLowerCase()=="no" || next_op.toLowerCase()=="n"){
-								a = false;
-								break;
-							}
-							else{
-								System.out.println("Invalid input.");
-								next_op = cns.readLine("Would you like to do another operation?");
-							}
+						if(next_op.toLowerCase()=="yes" || next_op.toLowerCase()=="y"){
+							a = true;
 						}
-						
-						
+						else if(next_op.toLowerCase()=="no" || next_op.toLowerCase()=="n"){
+							a = false;
+							break;
+						}
+						else{
+							System.out.println("Invalid input.");
+							next_op = cns.readLine("Would you like to do another operation?");
+						}
 					}
-							
-					
 				} catch (Exception ee) {
 					ee.printStackTrace();
 				}
-
 			}
 		}
 	}

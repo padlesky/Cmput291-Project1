@@ -260,6 +260,7 @@ public class NewRegistration {
 		}
 				
 	}
+	//this function is used to get the list of query result line by line
 	public static ArrayList<ArrayList<String>> getQueryResult(String query){
 
         ArrayList<ArrayList<String>> feedback = new ArrayList<ArrayList<String>>();
