@@ -16,6 +16,7 @@ public class VRecord {
 		ArrayList<ArrayList<String>> vtype;
 		ArrayList<String> ab;
 		String abc;
+		String datePattern = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		
 		cns.printf("\n\nWelcome to the Violatin Record function\n");
 		while (a=true) {
@@ -72,7 +73,6 @@ public class VRecord {
 						//ask the user to enter ticket type among the options listed
 						vtype= getQueryResult("select vtype from ticket_type");
 						System.out.print("Here are all the violation types,\n");
-								
 						for (int i=1;i<vtype.size();i++){
 							ab=vtype.get(i);
 							for (int j=0;j<ab.size();j++){
@@ -80,16 +80,13 @@ public class VRecord {
 								System.out.print("\t"+ abc + ";\n");
 							}
 						}
-								
 						String choice=cns.readLine("Please enter the appropriate type:");
 						//check if the type entered is valid or not		
 						ResultSet type = database.create_statement("select vtype from ticket_type where vtype = '" + choice + "'");
 						while (!(type.next())){
 							System.out.println("The input is invalid.");
-							
 							vtype= getQueryResult("select vtype from ticket_type");
 							System.out.print("Here are all the violation tyes,\n");
-								
 							for (int i=1;i<vtype.size();i++){
 								ab=vtype.get(i);
 								for (int j=0;j<ab.size();j++){
@@ -97,12 +94,14 @@ public class VRecord {
 									System.out.print("\t"+ abc + ";\n");
 								}
 							}
-							
 							choice=cns.readLine("Please enter the appropriate type:");
 							type = database.create_statement("select vtype from ticket_type where vtype = '" + choice + "'");
 						}
-							
-						String vdate = cns.readLine("Please enter the violation date:");
+						String vdate = cns.readLine("Please enter the violation date (yyyy-mm-dd):");
+						while(!(vdate.matches(datePattern))){
+					    	System.out.println("Invalid input.");
+					    	vdate = cns.readLine("Please enter the violation date: (yyyy-mm-dd)");
+					    }
 						String place = cns.readLine("Please enter where the violation took place:");
 						String des = cns.readLine("Please enter the violation description:");
 						//generate the ticket number by the system its own
@@ -111,8 +110,8 @@ public class VRecord {
 						database.create_statement("INSERT INTO ticket(ticket_no, violator_no, vehicle_id, office_no, vtype, vdate, place, descriptions)"
 								+ " VALUES('" + ticket_no +"','" + violator_no + "','" + vehicle_id + "','" + office_no + "','"
 								+ choice + "', date'" + vdate + "', '" + place + "', '" + des + "')");
-									
 						//Ask if the user continue entering
+						System.out.println("Registeration completed.");
 						String next_op = cns.readLine("Would you like to do another operation?");
 						if(next_op.toLowerCase().equals("yes") || next_op.toLowerCase().equals("y")){
 							a = true;

@@ -19,8 +19,8 @@ public class NewRegistration {
 		ArrayList<ArrayList<String>> type;
 		ArrayList<String> ab;
 		String abc;
-		
 		String color;
+		String datePattern = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		Db database = Db.getMeMyDBPlx();
 
 		cns.printf("\n\n\n" + "Welcome to the New Car Registration function\n");
@@ -32,122 +32,153 @@ public class NewRegistration {
 			}
 			if (input.equals("")) {
 				System.out.println("This is Empty.");
-				//input = cns
-					//	.readLine("Please enter the seial number of the car: ");
 			} else {
 				try {
 					String is_primary = cns
 							.readLine("Are u a primary owner?");
 					if (is_primary.toLowerCase().equals("yes")||is_primary.toLowerCase().equals("y")){
-						ResultSet res = database
-								.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '"
-										+ input + "'");
+						ResultSet res = database.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '" + input + "'");
 						if (res.next()) {
 							System.out.println("This car is already registed");
 						} else {
-							String sin = cns
-									.readLine("Please enter the owner's sin: ");
-							ResultSet check_sin = database
-									.create_statement("SELECT sin FROM people WHERE sin = '"
-											+ sin + "'");
+							String sin = cns.readLine("Please enter the owner's sin: ");
+							ResultSet check_sin = database.create_statement("SELECT sin FROM people WHERE sin = '" + sin + "'");
 							if (!(check_sin.next())) {
-								name = cns
-										.readLine("Please enter the owner's name: ");
-								double height = Double.parseDouble (cns
-										.readLine("Please enter the owner's height: "));
-								double weight = Double.parseDouble (cns
-										.readLine("Please enter the owner's weight: "));
-								String eyecolor = cns
-										.readLine("Please enter the owner's eye color: ");
-								String haircolor = cns
-										.readLine("Please enter the owner's hair color: ");
-								String addr = cns
-										.readLine("Please enter the owner's address: ");
-								String gender = cns
-										.readLine("Please enter the owner's gender (m/f): ");
+								name = cns.readLine("Please enter the owner's name: ");
+								while(!(TypeChecking.checkLetter(name))){
+									System.out.println("Invalid input.");
+									name = cns.readLine("Please enter the owner's name: ");								
+								}
+								String height1 = cns.readLine("Please enter the owner's height: ");
+								while(!(TypeChecking.checkInt(height1))){
+									System.out.println("Invalid input.");
+									height1 = cns.readLine("Please enter the owner's height: ");								
+								}
+								double height = Double.parseDouble (height1);
+								String weight1 = cns.readLine("Please enter the owner's weight: ");
+								while(!(TypeChecking.checkInt(weight1))){
+									System.out.println("Invalid input.");
+									weight1 = cns.readLine("Please enter the owner's weight: ");								
+								}
+								double weight = Double.parseDouble (weight1);
+								String eyecolor = cns.readLine("Please enter the owner's eye color: ");
+								while(!(TypeChecking.checkLetter(eyecolor))){
+									System.out.println("Invalid input.");
+									eyecolor = cns.readLine("Please enter the owner's eye color: ");								
+								}
+								String haircolor = cns.readLine("Please enter the owner's hair color: ");
+								while(!(TypeChecking.checkLetter(haircolor))){
+									System.out.println("Invalid input.");
+									haircolor = cns.readLine("Please enter the owner's hair color: ");								
+								}
+								String addr = cns.readLine("Please enter the owner's address: ");
+								String gender = cns.readLine("Please enter the owner's gender (m/f): ");
+								while(!(gender.toLowerCase().equals("m") || gender.toLowerCase().equals("f"))){
+									System.out.println(gender);
+									System.out.println("Invalid input.");
+									gender = cns.readLine("Please enter the owner's gender (m/f): ");
+								}
 								String birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+							    while(!(birthday.matches(datePattern))){
+							    	System.out.println("Invalid input.");
+							    	birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+							    }
 					
 								database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
 										+ " VALUES('" + sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
 										+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
-										
 							}
-							
-								maker = cns
-										.readLine("Please enter the maker of the car: ");
-								model = cns
-										.readLine("Please enter the model of the car: ");
-								String year_buff = cns
-										.readLine("Please enter the year of the car: ");
-								year = Integer.parseInt(year_buff);
-								color = cns
-										.readLine("Please enter the color of the car: ");
-								
-								
-								type= getQueryResult("select type from vehicle_type");//cns.readLine();
-								System.out.print("Here are all the type u can choice from, please choice from the following(Enter the index of your choice)\n");
-								
-								for (int i=1;i<type.size();i++){
-									ab=type.get(i);
-									for (int j=0;j<ab.size();j++){
-										abc = ab.get(j);
-										System.out.print(i +" : "+abc+"\n");
-									}
+							maker = cns.readLine("Please enter the maker of the car: ");
+							while(!(TypeChecking.checkLetter(maker))){
+								System.out.println("Invalid input.");
+								maker = cns.readLine("Please enter the maker of the car: ");								
+							}
+							model = cns.readLine("Please enter the model of the car: ");
+							while(!(TypeChecking.checkLetter(model))){
+								System.out.println("Invalid input.");
+								model = cns.readLine("Please enter the model of the car: ");								
+							}
+							String year_buff = cns.readLine("Please enter the year of the car: ");
+							while(!(TypeChecking.checkInt(year_buff))){
+								System.out.println("Invalid input.");
+								year_buff = cns.readLine("Please enter the year of the car: ");								
+							}
+							year = Integer.parseInt(year_buff);
+							color = cns.readLine("Please enter the color of the car: ");
+							while(!(TypeChecking.checkLetter(color))){
+								System.out.println("Invalid input.");
+								color = cns.readLine("Please enter the color of the car: ");								
+							}
+							type= getQueryResult("select type from vehicle_type");//cns.readLine();
+							System.out.print("Here are all the types you can choice from, please choose from the following(Enter the index of your choice)\n");
+							for (int i=1;i<type.size();i++){
+								ab=type.get(i);
+								for (int j=0;j<ab.size();j++){
+									abc = ab.get(j);
+									System.out.print(i +" : "+abc+"\n");
 								}
-								
-								String choice_type=cns.readLine("you choice: ");
-								
-								ResultSet type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
-								
-								while (!(type1.next())){
-									
-								System.out.println("The input is invalid");
-								choice_type=cns.readLine("choice the type: ");
-								type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
-								}
-								database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
-										+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
-							
-								is_primary="y";
-								database.create_statement("INSERT INTO owner(owner_id,vehicle_id,is_primary_owner)"
-											+"VALUES('" + sin + "','"+ input + "','"+is_primary+"')");	
-								}
+							}
+							String choice_type=cns.readLine("Please enter your type: ");
+							ResultSet type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
+							while (!(type1.next())){
+							System.out.println("The input is invalid");
+							choice_type=cns.readLine("Please choose the type again: ");
+							type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
+							}
+							database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
+									+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
+							is_primary="y";
+							database.create_statement("INSERT INTO owner(owner_id,vehicle_id,is_primary_owner)"
+									+"VALUES('" + sin + "','"+ input + "','"+is_primary+"')");	
+						}
 					}				
-							else if (is_primary.toLowerCase().equals("no")||is_primary.toLowerCase().equals("n")){
-								
-								ResultSet res = database
-										.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '"
-												+ input + "'");
-								ResultSet check_Po= database.create_statement("select vehicle_id from owner where vehicle_id='"+input+"' and is_primary_owner = 'y'");
+					else if (is_primary.toLowerCase().equals("no")||is_primary.toLowerCase().equals("n")){
+						ResultSet res = database.create_statement("SELECT serial_no FROM vehicle WHERE serial_no = '" + input + "'");
+						ResultSet check_Po= database.create_statement("select vehicle_id from owner where vehicle_id='"+input+"' and is_primary_owner = 'y'");
 						if ((check_Po.next())) {
-
 							if (res.next()) {
-
-								String sin = cns
-										.readLine("Please enter the owner's sin: ");
-								ResultSet check_sin = database
-										.create_statement("SELECT sin FROM people WHERE sin = '"
-												+ sin + "'");
+								String sin = cns.readLine("Please enter the owner's sin: ");
+								ResultSet check_sin = database.create_statement("SELECT sin FROM people WHERE sin = '" + sin + "'");
 								if (!(check_sin.next())) {
-									name = cns
-											.readLine("Please enter the owner's name: ");
-									double height = Double
-											.parseDouble(cns
-													.readLine("Please enter the owner's height: "));
-									double weight = Double
-											.parseDouble(cns
-													.readLine("Please enter the owner's weight: "));
-									String eyecolor = cns
-											.readLine("Please enter the owner's eye color: ");
-									String haircolor = cns
-											.readLine("Please enter the owner's hair color: ");
-									String addr = cns
-											.readLine("Please enter the owner's address: ");
-									String gender = cns
-											.readLine("Please enter the owner's gender (m/f): ");
-									String birthday = cns
-											.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
-						
+									name = cns.readLine("Please enter the owner's name: ");
+									while(!(TypeChecking.checkLetter(name))){
+										System.out.println("Invalid input.");
+										name = cns.readLine("Please enter the owner's name: ");								
+									}
+									String height1 = cns.readLine("Please enter the owner's height: ");
+									while(!(TypeChecking.checkInt(height1))){
+										System.out.println("Invalid input.");
+										height1 = cns.readLine("Please enter the owner's height: ");								
+									}
+									double height = Double.parseDouble (height1);
+									String weight1 = cns.readLine("Please enter the owner's weight: ");
+									while(!(TypeChecking.checkInt(weight1))){
+										System.out.println("Invalid input.");
+										weight1 = cns.readLine("Please enter the owner's weight: ");								
+									}
+									double weight = Double.parseDouble (weight1);
+									String eyecolor = cns.readLine("Please enter the owner's eye color: ");
+									while(!(TypeChecking.checkLetter(eyecolor))){
+										System.out.println("Invalid input.");
+										eyecolor = cns.readLine("Please enter the owner's eye color: ");								
+									}
+									String haircolor = cns.readLine("Please enter the owner's hair color: ");
+									while(!(TypeChecking.checkLetter(haircolor))){
+										System.out.println("Invalid input.");
+										haircolor = cns.readLine("Please enter the owner's hair color: ");								
+									}
+									String addr = cns.readLine("Please enter the owner's address: ");
+									String gender = cns.readLine("Please enter the owner's gender (m/f): ");
+									while(!(gender.toLowerCase().equals("m") || gender.toLowerCase().equals("f"))){
+										System.out.println(gender);
+										System.out.println("Invalid input.");
+										gender = cns.readLine("Please enter the owner's gender (m/f): ");
+									}
+									String birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+									while(!(birthday.matches(datePattern))){
+								    	System.out.println("Invalid input.");
+								    	birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+								    }
 									database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
 											+ " VALUES('" + sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
 											+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
@@ -155,91 +186,106 @@ public class NewRegistration {
 								else{
 									System.out.println("Registration has been completed.");
 								}
-									is_primary="n";
-									database.create_statement("INSERT INTO owner(owner_id,vehicle_id,is_primary_owner)"
+								is_primary="n";
+								database.create_statement("INSERT INTO owner(owner_id,vehicle_id,is_primary_owner)"
 										+"VALUES('" + sin + "','"+ input + "','"+is_primary+"')");
-								
 							}
-								else{
-									String sin = cns
-											.readLine("Please enter the owner's sin: ");
-									ResultSet check_sin = database
-											.create_statement("SELECT sin FROM people WHERE sin = '"
-													+ sin + "'");
-									if (!(check_sin.next())) {
-										name = cns
-												.readLine("Please enter the owner's name: ");
-										double height = Double.parseDouble (cns
-												.readLine("Please enter the owner's height: "));
-										double weight = Double.parseDouble (cns
-												.readLine("Please enter the owner's weight: "));
-										String eyecolor = cns
-												.readLine("Please enter the owner's eye color: ");
-										String haircolor = cns
-												.readLine("Please enter the owner's hair color: ");
-										String addr = cns
-												.readLine("Please enter the owner's address: ");
-										String gender = cns
-												.readLine("Please enter the owner's gender (m/f): ");
-										String birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
-							
-										database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
-												+ " VALUES('" + sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
-												+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");}
-									maker = cns
-											.readLine("Please enter the maker of the car: ");
-									model = cns
-											.readLine("Please enter the model of the car: ");
-									String year_buff = cns
-											.readLine("Please enter the year of the car: ");
-									year = Integer.parseInt(year_buff);
-									color = cns
-											.readLine("Please enter the color of the car: ");
-									
-									
-									
-									
-									
-									
-									type= getQueryResult("select type from vehicle_type");//cns.readLine();
-									System.out.print("Here are all the type u can choice from, please choice from the following(Enter the index of your choice)\n");
-									
-									for (int i=1;i<type.size();i++){
-										ab=type.get(i);
-										for (int j=0;j<ab.size();j++){
-											abc = ab.get(j);
-											System.out.print(i +" : "+abc+"\n");
-										}
+							else{
+								String sin = cns.readLine("Please enter the owner's sin: ");
+								ResultSet check_sin = database.create_statement("SELECT sin FROM people WHERE sin = '" + sin + "'");
+								if (!(check_sin.next())) {
+									name = cns.readLine("Please enter the owner's name: ");
+									while(!(TypeChecking.checkLetter(name))){
+										System.out.println("Invalid input.");
+										name = cns.readLine("Please enter the owner's name: ");								
 									}
-									
-									String choice_type=cns.readLine("you choice: ");
-									
-									ResultSet type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
-									
-									while (!(type1.next())){
-										
-									System.out.println("The input is invalid");
-									choice_type=cns.readLine("choice the type: ");
-									type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
+									String height1 = cns.readLine("Please enter the owner's height: ");
+									while(!(TypeChecking.checkInt(height1))){
+										System.out.println("Invalid input.");
+										height1 = cns.readLine("Please enter the owner's height: ");								
 									}
-									database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
-											+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
-									database.create_statement("INSERT INTO owner(owner_id,vehicle_id,is_primary_owner)"
-											+"VALUES('" + sin + "','"+ input + "','"+is_primary+"')");
+									double height = Double.parseDouble (height1);
+									String weight1 = cns.readLine("Please enter the owner's weight: ");
+									while(!(TypeChecking.checkInt(weight1))){
+										System.out.println("Invalid input.");
+										weight1 = cns.readLine("Please enter the owner's weight: ");								
+									}
+									double weight = Double.parseDouble (weight1);
+									String eyecolor = cns.readLine("Please enter the owner's eye color: ");
+									while(!(TypeChecking.checkLetter(eyecolor))){
+										System.out.println("Invalid input.");
+										eyecolor = cns.readLine("Please enter the owner's eye color: ");								
+									}
+									String haircolor = cns.readLine("Please enter the owner's hair color: ");
+									while(!(TypeChecking.checkLetter(haircolor))){
+										System.out.println("Invalid input.");
+										haircolor = cns.readLine("Please enter the owner's hair color: ");								
+									}
+									String addr = cns.readLine("Please enter the owner's address: ");
+									String gender = cns.readLine("Please enter the owner's gender (m/f): ");
+									while(!(gender.toLowerCase().equals("m") || gender.toLowerCase().equals("f"))){
+										System.out.println(gender);
+										System.out.println("Invalid input.");
+										gender = cns.readLine("Please enter the owner's gender (m/f): ");
+									}
+									String birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+									while(!(birthday.matches(datePattern))){
+								    	System.out.println("Invalid input.");
+								    	birthday = cns.readLine("Please enter the owner's birthday (yyyy-mm-dd): ");
+								    }
+									database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
+											+ " VALUES('" + sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
+											+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
 								}
-								
-							/*else{
-								System.out.println("The input is invalid");
-								is_primary=  cns.readLine("Is he/she a primary ower? ");
-								
-							}*/
-							
-					}
+								maker = cns.readLine("Please enter the maker of the car: ");
+								while(!(TypeChecking.checkLetter(maker))){
+										System.out.println("Invalid input.");
+										maker = cns.readLine("Please enter the maker of the car: ");								
+									}
+								model = cns.readLine("Please enter the model of the car: ");
+								while (!(TypeChecking.checkLetter(model))) {
+									System.out.println("Invalid input.");
+									model = cns.readLine("Please enter the model of the car: ");
+								}
+								String year_buff = cns.readLine("Please enter the year of the car: ");
+								while (!(TypeChecking.checkInt(year_buff))) {
+									System.out.println("Invalid input.");
+									year_buff = cns.readLine("Please enter the year of the car: ");
+								}
+								year = Integer.parseInt(year_buff);
+								color = cns.readLine("Please enter the color of the car: ");
+								while (!(TypeChecking.checkLetter(color))) {
+									System.out.println("Invalid input.");
+									color = cns.readLine("Please enter the color of the car: ");
+								}
+								type = getQueryResult("select type from vehicle_type");// cns.readLine();
+								System.out.print("Here are all the types you can choice from, please choose from the following(Enter the index of your choice)\n");
+								for (int i = 1; i < type.size(); i++) {
+									ab = type.get(i);
+									for (int j = 0; j < ab.size(); j++) {
+										abc = ab.get(j);
+										System.out.print(i + " : " + abc + "\n");
+									}
+								}
+									
+								String choice_type=cns.readLine("Please enter your type: ");
+								ResultSet type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
+								while (!(type1.next())){
+									System.out.println("The input is invalid");
+									choice_type=cns.readLine("Please choose the type again: ");
+									type1 = database.create_statement("select type_id from vehicle_type where type_id = '"+choice_type+"'");
+								}
+								database.create_statement("INSERT INTO vehicle(serial_no, maker, model, year, color,type_id)"
+										+ " VALUES('" + input +"','" + maker + "','" + model + "','" + year + "','" + color + "','"+choice_type+"')");
+								database.create_statement("INSERT INTO owner(owner_id,vehicle_id,is_primary_owner)"
+										+"VALUES('" + sin + "','"+ input + "','"+is_primary+"')");
+							}
+						}
 						else{
 							System.out.print("Please enter primary owner first.\n");
 							a=true;
 						}
-				}
+					}
 					String is_end= cns.readLine("Wouild like do more opreation?");
 					if (is_end.toLowerCase().equals("yes")||is_end.toLowerCase().equals("y")){
 						a=true;

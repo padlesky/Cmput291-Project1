@@ -20,8 +20,8 @@ public class Auto_Transaction {
 		ArrayList<ArrayList<String>> type;
 		ArrayList<String> ab;
 		String abc;
-
 		String color;
+		String datePattern = "\\d{4}-\\d{1,2}-\\d{1,2}";
 		Db database = Db.getMeMyDBPlx();
 		NewRegistration nr = new NewRegistration();
 
@@ -47,8 +47,16 @@ public class Auto_Transaction {
 						String buyer_sin = cns.readLine("Please enter the buyer's sin: ");
 						//check if the buyer is in our database or not
 						ResultSet check_buyer_sin = database.create_statement("select sin from people where sin= '" + buyer_sin + "'");
-						String selling_date = cns.readLine("please enter the selling date:");
-						String price1 = cns.readLine("Please enter the sell price:");
+						String selling_date = cns.readLine("please enter the selling date (yyyy-mm-dd):");
+						while(!(selling_date.matches(datePattern))){
+					    	System.out.println("Invalid input.");
+					    	selling_date = cns.readLine("Please enter the selling date: (yyyy-mm-dd)");
+					    }
+						String price1 = cns.readLine("Please enter the selling price:");
+						while(!(TypeChecking.checkInt(price1))){
+							System.out.println("Invalid input.");
+							price1 = cns.readLine("Please enter the selling price: ");								
+						}
 						double price = Double.parseDouble(price1); 
 						if(!(check_buyer_sin.next())){
 							name = cns.readLine("Please enter the buyer's name: ");
@@ -59,7 +67,7 @@ public class Auto_Transaction {
 							String height1 = cns.readLine("Please enter the buyer's height: ");
 							while(!(TypeChecking.checkInt(height1))){
 								System.out.println("Invalid input.");
-								name = cns.readLine("Please enter the buyer's height: ");								
+								height1 = cns.readLine("Please enter the buyer's height: ");								
 							}
 							double height = Double.parseDouble (height1);
 							String weight1 = cns.readLine("Please enter the buyer's weight: ");
@@ -79,17 +87,17 @@ public class Auto_Transaction {
 								haircolor = cns.readLine("Please enter the buyer's hair color: ");								
 							}
 							String addr = cns.readLine("Please enter the buyer's address: ");
-							while(!(TypeChecking.checkLetter(addr))){
-								System.out.println("Invalid input.");
-								addr = cns.readLine("Please enter the buyer's address: ");								
-							}
 							String gender = cns.readLine("Please enter the buyer's gender (m/f): ");
-							while(gender != "m" || gender != "f"){
+							while(!(gender.toLowerCase().equals("m") || gender.toLowerCase().equals("f"))){
+								System.out.println(gender);
 								System.out.println("Invalid input.");
-								gender = cns.readLine("Please enter the buyer's gender (m/f): ");								
+								gender = cns.readLine("Please enter the buyer's gender (m/f): ");
 							}
 							String birthday = cns.readLine("Please enter the buyer's birthday (yyyy-mm-dd): ");
-				
+							while(!(birthday.matches(datePattern))){
+						    	System.out.println("Invalid input.");
+						    	birthday = cns.readLine("Please enter the buyer's birthday (yyyy-mm-dd): ");
+						    }
 							database.create_statement("INSERT INTO people(sin, name, height, weight, eyecolor, haircolor, addr, gender, birthday)"
 									+ " VALUES('" + buyer_sin + "','" + name + "','" + height + "','" + weight + "','" + eyecolor + "','" 
 									+ haircolor + "','" + addr + "','" + gender + "', date '" + birthday + "')");
